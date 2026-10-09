@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Auteurs Opex360</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header>
+    <h1>Auteurs Opex360</h1>
+    <p>Vos règles sont appliquées sur tous les articles.</p>
+  </header>
+  <main>
+    <section class="settings">
+      <label class="setting-row">
+        <input id="hide-branches" type="checkbox">
+        <span>
+          <strong>Masquer toute la branche</strong>
+          <small>Cache aussi toutes les réponses placées sous un auteur exclu.</small>
+        </span>
+      </label>
+    </section>
+    <section>
+      <h2>Auteurs masqués</h2>
+      <div id="hidden-list" class="rules"></div>
+    </section>
+    <section>
+      <h2>Auteurs en couleur</h2>
+      <div id="color-list" class="rules"></div>
+    </section>
+    <section class="transfer">
+      <h2>Sauvegarde</h2>
+      <div class="transfer-actions">
+        <button id="export-config" class="transfer-button" type="button">Exporter</button>
+        <button id="import-config" class="transfer-button" type="button">Importer</button>
+      </div>
+      <p id="transfer-status" class="transfer-status" role="status" aria-live="polite"></p>
+    </section>
+  </main>
+  <template id="rule-template">
+    <div class="rule">
+      <span class="swatch"></span>
+      <span class="author"></span>
+      <button type="button">Retirer</button>
+    </div>
+  </template>
+  <script src="config.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+.o360-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 12px;
+  padding-top: 8px;
+  border-top: 1px dashed rgba(30, 45, 55, 0.25);
+  font: 12px/1.3 system-ui, sans-serif;
+}
+
+.o360-action,
+.o360-color-select {
+  min-height: 28px;
+  border: 1px solid #8a969e;
+  border-radius: 4px;
+  background: #fff;
+  color: #17232b;
+  cursor: pointer;
+  font: 12px system-ui, sans-serif;
+}
+
+.o360-action { padding: 4px 9px; }
+.o360-color-select { padding: 3px 5px; }
+.o360-action:hover { background: #edf2f5; }
+
+.o360-highlighted {
+  background: var(--o360-color, #dff5e3) !important;
+  border-left: 5px solid color-mix(in srgb, var(--o360-color, #dff5e3), #000 28%) !important;
+  padding: 12px !important;
+  border-radius: 4px;
+}
+
+.o360-hidden-body { display: none !important; }
+
+/* Le nœud reste visible, mais les autres éléments directs de la branche sont repliés. */
+.o360-collapsed-branch > :not(.o360-placeholder) { display: none !important; }
+
+.o360-placeholder {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 28px;
+  margin: 5px 0;
+  padding: 2px 6px 2px 25px;
+  border: 0;
+  background: transparent;
+  color: #3b464d;
+  font: 13px/1.4 system-ui, sans-serif;
+}
+
+.o360-placeholder::before {
+  content: "";
+  position: absolute;
+  left: 9px;
+  top: 0;
+  bottom: 50%;
+  width: 13px;
+  border-left: 1px dotted #7b878e;
+  border-bottom: 1px dotted #7b878e;
+}
+
+.o360-node-toggle {
+  position: relative;
+  z-index: 1;
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 22px;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: 1px solid #738087;
+  border-radius: 3px;
+  background: #fff;
+  color: #243746;
+  cursor: pointer;
+  font: 700 17px/1 system-ui, sans-serif;
+}
+
+.o360-node-toggle:hover { background: #e8eef1; }
+.o360-node-label { font-style: italic; color: #66747c; }
+
+@media (max-width: 640px) {
+  .o360-toolbar { align-items: stretch; flex-direction: column; }
+  .o360-color-label { display: flex; justify-content: space-between; align-items: center; }
+}

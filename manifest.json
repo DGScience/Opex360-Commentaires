@@ -1,0 +1,47 @@
+{
+  "manifest_version": 3,
+  "name": "Opex360 — Filtre de commentaires",
+  "version": "2026.5",
+  "description": "Masque les commentaires de certains auteurs et colore ceux des auteurs appréciés sur Opex360.",
+  "permissions": ["storage"],
+  "host_permissions": ["https://www.opex360.com/*", "https://opex360.com/*"],
+  "content_scripts": [
+    {
+      "matches": ["https://www.opex360.com/*", "https://opex360.com/*"],
+      "js": ["content.js"],
+      "css": ["content.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_title": "Gérer les auteurs Opex360",
+    "default_popup": "popup.html",
+    "default_area": "navbar",
+    "default_icon": {
+      "16": "icons/icon-16.png",
+      "32": "icons/icon-32.png"
+    }
+  },
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  },
+  "icons": {
+    "16": "icons/icon-16.png",
+    "32": "icons/icon-32.png",
+    "48": "icons/icon-48.png",
+    "96": "icons/icon-96.png"
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "opex360-commentaires-navbar@local",
+      "data_collection_permissions": {
+        "required": ["none"]
+      },
+      "strict_min_version": "140.0"
+    },
+    "gecko_android": {
+      "strict_min_version": "142.0"
+    }
+  }
+}
