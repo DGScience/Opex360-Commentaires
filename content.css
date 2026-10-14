@@ -29,6 +29,24 @@
   border-left: 5px solid color-mix(in srgb, var(--o360-color, #dff5e3), #000 28%) !important;
   padding: 12px !important;
   border-radius: 4px;
+  color: var(--o360-text, #111) !important;
+}
+
+/* Fond clair forcé : texte noir partout, quel que soit le thème (sombre) du site. */
+/* Noir sur fond clair, blanc si la couleur choisie est foncée (--o360-text). */
+.o360-highlighted *:not(.o360-action):not(.o360-color-select):not(option) {
+  color: var(--o360-text, #111) !important;
+  -webkit-text-fill-color: var(--o360-text, #111) !important;
+  text-shadow: none !important;
+}
+.o360-highlighted a { text-decoration: underline; }
+
+.o360-highlighted .o360-action,
+.o360-highlighted .o360-color-select {
+  background: #fff !important;
+  color: #17232b !important;
+  -webkit-text-fill-color: #17232b !important;
+  border-color: #8a969e !important;
 }
 
 .o360-hidden-body { display: none !important; }

@@ -20,6 +20,14 @@
           <small>Cache aussi toutes les réponses placées sous un auteur exclu.</small>
         </span>
       </label>
+      <label class="setting-row">
+        <input id="sync-enabled" type="checkbox">
+        <span>
+          <strong>Synchroniser via le compte Firefox</strong>
+          <small>Entre ordinateurs uniquement (Firefox Android ne synchronise pas les extensions). Nécessite « Modules complémentaires » coché dans les réglages Sync.</small>
+          <small id="sync-status" class="sync-status"></small>
+        </span>
+      </label>
     </section>
     <section>
       <h2>Auteurs masqués</h2>
@@ -28,6 +36,12 @@
     <section>
       <h2>Auteurs en couleur</h2>
       <div id="color-list" class="rules"></div>
+    </section>
+    <section>
+      <h2>Couleurs</h2>
+      <p class="hint">Libellé facultatif (sinon le nom de la couleur s’affiche) et code web de la couleur (#rrggbb). Au moins une catégorie est conservée.</p>
+      <div id="palette-list" class="palette"></div>
+      <button id="add-slot" class="add-slot" type="button">+ Ajouter une catégorie</button>
     </section>
     <section class="transfer">
       <h2>Sauvegarde</h2>
@@ -42,7 +56,17 @@
     <div class="rule">
       <span class="swatch"></span>
       <span class="author"></span>
+      <span class="slot-name"></span>
       <button type="button">Retirer</button>
+    </div>
+  </template>
+  <template id="palette-template">
+    <div class="slot">
+      <span class="swatch"></span>
+      <input class="slot-label" type="text" maxlength="40" aria-label="Libellé">
+      <input class="slot-hex" type="text" maxlength="7" spellcheck="false" aria-label="Code couleur web">
+      <button class="slot-reset" type="button" title="Couleur et libellé par défaut">↺</button>
+      <button class="slot-delete" type="button" title="Supprimer cette catégorie">✕</button>
     </div>
   </template>
   <script src="config.js"></script>

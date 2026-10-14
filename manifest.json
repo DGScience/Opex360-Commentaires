@@ -1,14 +1,17 @@
 {
   "manifest_version": 3,
   "name": "Opex360 — Filtre de commentaires",
-  "version": "2026.5",
+  "version": "2026.9",
   "description": "Masque les commentaires de certains auteurs et colore ceux des auteurs appréciés sur Opex360.",
   "permissions": ["storage"],
   "host_permissions": ["https://www.opex360.com/*", "https://opex360.com/*"],
+  "background": {
+    "scripts": ["config.js", "background.js"]
+  },
   "content_scripts": [
     {
       "matches": ["https://www.opex360.com/*", "https://opex360.com/*"],
-      "js": ["content.js"],
+      "js": ["config.js", "content.js"],
       "css": ["content.css"],
       "run_at": "document_idle"
     }

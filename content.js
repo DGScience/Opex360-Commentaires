@@ -13,16 +13,12 @@
     "[itemprop='author']"
   ];
   const BODY_SELECTORS = [".comment-body", "article.comment-body", ".comment-container"];
-  const PALETTE = [
-    ["#dff5e3", "Vert"],
-    ["#fff1b8", "Jaune"],
-    ["#dcecff", "Bleu"],
-    ["#f0e1ff", "Violet"],
-    ["#ffe0ea", "Rose"]
-  ];
+  const C = globalThis.OpexConfig;
+  const PALETTE_KEY = C.PALETTE_KEY;
 
   let rules = {};
   let settings = { hideBranches: false };
+  let palette = C.normalizePalette();
 
   const normalize = (value) => value.replace(/\s+/g, " ").trim().toLocaleLowerCase("fr");
 
@@ -80,15 +76,31 @@
     const select = document.createElement("select");
     select.className = "o360-color-select";
     select.title = `Choisir une couleur pour ${author}`;
-    select.append(new Option("Aucune couleur", ""));
-    for (const [value, name] of PALETTE) select.append(new Option(name, value));
+    fillSelect(select);
     select.addEventListener("change", () => {
-      setRule(author, select.value ? { type: "color", color: select.value } : null);
+      const slot = palette.find((p) => p.id === select.value);
+      setRule(author, slot ? { type: "color", slot: slot.id, color: slot.color } : null);
     });
     label.append(select);
     toolbar.append(hide, label);
     body.append(toolbar);
     return toolbar;
+  }
+
+  /** (Re)construit les choix de couleur ; ne touche au DOM que si la palette a changé. */
+  function fillSelect(select) {
+    const signature = JSON.stringify(palette);
+    if (select.dataset.o360Palette === signature) return;
+    select.dataset.o360Palette = signature;
+    const options = [new Option("Aucune couleur", "")];
+    for (const entry of palette) {
+      const option = new Option(C.optionText(entry), entry.id);
+      option.style.backgroundColor = entry.color;
+      option.style.color = C.textColorFor(entry.color);
+      options.push(option);
+    }
+    options.forEach((o) => { o.dataset.opex360Ui = "true"; });
+    select.replaceChildren(...options);
   }
 
   function makePlaceholder(comment, body, toolbar, author) {
@@ -134,12 +146,17 @@
     comment.classList.remove("o360-collapsed-branch");
     body.classList.remove("o360-hidden-body", "o360-highlighted");
     body.style.removeProperty("--o360-color");
+    body.style.removeProperty("--o360-text");
     const placeholder = comment.querySelector(":scope > .o360-placeholder");
     if (placeholder) placeholder.hidden = true;
     const toolbar = body.querySelector(":scope > .o360-toolbar");
     if (toolbar) {
       toolbar.hidden = false;
-      toolbar.querySelector(".o360-color-select").value = "";
+      const select = toolbar.querySelector(".o360-color-select");
+      fillSelect(select);
+      select.value = "";
+      select.style.removeProperty("box-shadow");
+      select.style.removeProperty("padding-left");
       const hide = toolbar.querySelector(".o360-hide-author");
       hide.textContent = "Masquer cet auteur";
       hide.title = "Masquer tous les commentaires de cet auteur";
@@ -176,8 +193,13 @@
     } else if (rule?.type === "color") {
       delete comment.dataset.o360Expanded;
       body.classList.add("o360-highlighted");
-      body.style.setProperty("--o360-color", rule.color || PALETTE[0][0]);
-      toolbar.querySelector(".o360-color-select").value = rule.color || PALETTE[0][0];
+      const color = C.ruleColor(rule, palette);
+      body.style.setProperty("--o360-color", color);
+      body.style.setProperty("--o360-text", C.textColorFor(color));
+      const select = toolbar.querySelector(".o360-color-select");
+      select.value = C.findSlot(rule, palette)?.id || "";
+      select.style.boxShadow = `inset 8px 0 0 ${color}`;
+      select.style.paddingLeft = "12px";
     } else {
       delete comment.dataset.o360Expanded;
     }
@@ -198,8 +220,9 @@
     getComments().forEach(applyComment);
   }
 
-  api.storage.local.get([STORAGE_KEY, SETTINGS_KEY]).then((data) => {
+  api.storage.local.get([STORAGE_KEY, SETTINGS_KEY, PALETTE_KEY]).then((data) => {
     rules = data[STORAGE_KEY] || {};
+    palette = C.normalizePalette(data[PALETTE_KEY]);
     settings = { ...settings, ...(data[SETTINGS_KEY] || {}) };
     applyAll();
     const observer = new MutationObserver((mutations) => {
@@ -215,6 +238,10 @@
     let changed = false;
     if (changes[STORAGE_KEY]) {
       rules = changes[STORAGE_KEY].newValue || {};
+      changed = true;
+    }
+    if (changes[PALETTE_KEY]) {
+      palette = C.normalizePalette(changes[PALETTE_KEY].newValue);
       changed = true;
     }
     if (changes[SETTINGS_KEY]) {
