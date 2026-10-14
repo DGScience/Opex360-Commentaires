@@ -2,7 +2,7 @@
 
 Extension Firefox pour filtrer les commentaires du site [Opex360](https://www.opex360.com/).
 
-**Version actuelle : 2026.5**
+**Version actuelle : 2026.9**
 
 Cette extension ajoute des commandes sous chaque commentaire d'Opex360 :
 
